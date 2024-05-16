@@ -4,14 +4,18 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.all
+    @authors = Author.all
   end
 
   def show
     @article = Article.find(params[:id])
+    @authors = Author.all
   end
 
   def new
     @article = Article.new
+    @authors = Author.all
+    
   end
 
   def create
@@ -26,10 +30,13 @@ class ArticlesController < ApplicationController
 
   def edit
     @article = Article.find(params[:id])
+    @authors = Author.all
+    
   end
 
   def update
     @article = Article.find(params[:id])
+    @author = Author.find(params[:id])
 
     if @article.update(article_params)
       redirect_to @article
@@ -47,6 +54,6 @@ class ArticlesController < ApplicationController
 
   private
     def article_params
-      params.require(:article).permit(:title, :body, :status)
+      params.require(:article).permit(:title, :body, :authorId, :status)
     end
 end
