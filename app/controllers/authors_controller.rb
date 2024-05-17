@@ -4,12 +4,7 @@ class AuthorsController < ApplicationController
     @articles = Article.all
   end
 
-  rescue_from ActiveRecord::RecordNotUnique, :with => :handle_exception
-
-  def handle_exception(error)
-    flash[:error] = error.message
-    redirect_to request.referer || root_path
-  end
+  
 
   def show
     @author = Author.find(params[:id])
@@ -21,10 +16,17 @@ class AuthorsController < ApplicationController
   end
 
   def create
+    # begin
+    #   @author = Author.new(author_params)
+    # rescue ActiveRecord::RecordNotUnique => exception
+    #   retry if (tries += 1) == 1
+    #   raise exception
+    # end
+
     @author = Author.new(author_params)
 
     if @author.save
-      redirect_to @author
+      redirect_to(@author, :notice => 'Author was successfully created.')
     else
       
       render :new, status: :unprocessable_entity
@@ -51,6 +53,8 @@ class AuthorsController < ApplicationController
 
     redirect_to articles_path, status: :see_other
   end
+
+  
 
   private
     def author_params
